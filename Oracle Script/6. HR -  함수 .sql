@@ -185,6 +185,78 @@ select mod( 3 , 2) as "MOD 나머지만 출력" ,            -- 나머지만 출력
            trunc ( 31 / 2 )  as "TRUNC  몫만 출력"   -- 몫만 출력
 from dual ;
 
+/*
+ ★ 날짜함수
+ - sysdate : 현재 시스템의 날짜를 출력하는 함수
+ - months_between : 두 날짜 사이의 개월 수를 출력
+ - add_months : 툭정 날짜에서 개월수를 더해서 출력
+ - next_day : 특정 날자에서 다음에 초래하는 요일을 인자로 받아서 도래하는 날짜를 출력
+ - last_day  : 달의 마지막 날짜를 출력
+ - round ( 날짜 ) : 날짜를 반올림 : 15일 이상 반올림 , 15일 미만 : 삭제
+ - trunc  ( 날짜 )  : 날짜를 잘라내는 함수
+*/
+
+select sysdate from dual ;     -- 23/12/07 (현재 시스템의 날짜)
+
+-- 날짜에 연산이 가능
+select sysdate 현재날짜 , sysdate - 1 어제날짜 , sysdate + 1 내일날짜 from dual ;
+
+-- 오늘에서 100일전 날짜
+select sysdate - 100 "100일 전 날짜" from dual;
+
+-- 오늘에서 1000일 후 날짜
+select sysdate + 1000 "1000일 후 날짜" from dual;
+
+-- 입사일에서 오늘날짜까지 총근무일수를 구함 ( 자료형이 date 타입의 컬럼이어야 함)  -> ( sysdate - hiredate)
+
+desc employee;
+
+-- 총근무일수 = trunc ( 오늘 날짜 - 입사날짜 )
+select ename 이름, trunc(sysdate - hiredate ) 총근무일수            -- trunc 함수가 소수점 이하 다 자름
+from employee;
+
+-- 이름, 입사일 ,입사일에서부터 1000일 시점의 날짜를 출력
+select ename 이름 , hiredate 입사날짜 , hiredate + 1000  "입사 후 1000일 날짜"
+from employee;
+
+-- 특정 날짜에서 월을 기준으로 출력 : TRUNC ( 날짜 , 'MONTH') , ROUND (날짜 , 'MONTH')
+select hiredate 원본날짜, trunc ( hiredate, 'MONTH') , round( hiredate , 'MONTH') from employee;
+
+-- 현재까지의 근무개월 수를 출력 : months_between ( 날짜 , 날짜 ) : 두 날짜 사이의 개월수 출력
+select ename 이름 , hiredate 입사날짜 , trunc (months_between ( sysdate , hiredate )) "현재까지의 근무개월수" from employee ;
+
+-- add_months :  특정날짜에서 몇개월 이후의 날짜를 출력
+-- 오늘날짜에서 100개월 이후의 날짜 ( add_months 사용)  , 100일 후의 날짜   (  date 타입일 때 가능 )
+select  sysdate 오늘날짜 , add_months (sysdate , 100) "100개월 후" , sysdate + 100 "100일 후의 날짜" from dual;    -- alias에서 숫자가 먼저나오면 "  " 로 묶어줘야 한다.
+
+-- last_day : 그 날짜의 마지막 날짜를 출력함
+select last_day (sysdate) from dual;
+
+-- 모든 사원의 입사한 날의 마지막 날짜가 무엇인지 출력
+select hiredate 입사날짜 , last_day( hiredate ) "입사한 날의 마지막 날짜" from employee;
+
+/*
+ ★★★형식 변환 함수
+ 
+ -  TO_CHAR : 날짜형, 숫자형를 문자형으로 변환
+ -  TO_DATE : 문자를 날짜형식으로 변환
+ -  TO_NUMBER : 문자를 숫자형식으로 변환
+ 
+*/
+
+select sysdate from dual ;                                                                             -- 23/12/07 로 출력
+
+-- YYYY : 년도 , MM : 월 , DD  : 일 , HH : 시간 , mm : 분 , SS : 초               -- mm은 대소문자 구별하기 (MM : 월  mm : 분
+select TO_CHAR (sysdate , 'YYYY-MM-DD HH : mm : SS') from dual;                
+
+select hiredate 입사날짜 , TO_CHAR ( hiredate , 'YYYY-MM-DD  HH : mm : SS') 입사날짜2
+from employee;
+
+select hiredate 입사날짜 , TO_CHAR ( hiredate , 'YYYY"년"MM"월"DD"일"  HH"시" mm"분" SS"초"') 입사날짜2    -- 년 , 월, 일을 각 각  "  " 로 묶어주면 한글로 출력가능
+from employee;
+
+
+
 
 
 

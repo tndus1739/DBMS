@@ -17,14 +17,17 @@ select * from redo_log;
 
 -- 1. hr 계정을 생성 : Oracle 12 버정 이상 부터 계정 생성시 -> c##계정명 (초기한번만 설정)
     -- 계정명 : hr 암호 : 1234
+    
 create user C##HR4 identified by 1234
 default tablespace USERS
 temporary tablespace TEMP;
 
 -- 2. 계정에 권한을 부여하기 : connect, resource 권한 
+
 grant resource, connect to C##HR4;    -- grant : 부여하겠다.
 
 -- 3. 테이블 스페이스에서 서용량 할당
+
 alter user C##HR4 quota unlimited on USERS; -- user space를 무제한 사용할 수 있도록 함
 
 --4. 계정 삭제

@@ -170,13 +170,20 @@ select salary 월급 , salary * 0.033 소득세  , round ( salary * 0.033) R1 , round
            round (salary - ( salary * 0.033) , 2 ) 실수령액
 from employee;
 
--- TRUNC : 특정 자리에서 잘라내 버림
+-- TRUNC : 특정 자리에서 잘라내 버림    --> 특정 날짜를 연산할 때 사용  (ex) 오늘 날짜에서 100 이후의 날짜가 언제인가?
 select trunc ( 98.7654 ) T1,
            trunc ( 98.7654 , 2  ) T2,
            trunc ( 98.7654 , -1 ) T3,
            trunc ( 98.7654 , -2 ) T4
 from dual ;        
 
+-- MOD : 나머지 값만 출력  
+-- MOD ( 인자 1 , 인자 2)
+-- TRUNC : 몫만 출력할 때
+
+select mod( 3 , 2) as "MOD 나머지만 출력" ,            -- 나머지만 출력
+           trunc ( 31 / 2 )  as "TRUNC  몫만 출력"   -- 몫만 출력
+from dual ;
 
 
 
