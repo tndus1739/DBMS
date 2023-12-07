@@ -246,17 +246,64 @@ select hiredate 입사날짜 , last_day( hiredate ) "입사한 날의 마지막 날짜" from e
 
 select sysdate from dual ;                                                                             -- 23/12/07 로 출력
 
--- YYYY : 년도 , MM : 월 , DD  : 일 , HH : 시간 , mm : 분 , SS : 초               -- mm은 대소문자 구별하기 (MM : 월  mm : 분
-select TO_CHAR (sysdate , 'YYYY-MM-DD HH : mm : SS') from dual;                
+-- YYYY : 년도 , MM : 월 , DD  : 일 , HH : 시간 , MI : 분 , SS : 초  , DAY : 요일 (월요일, 화요일..) , DY (월, 화, 수 ...)         
+select TO_CHAR (sysdate , 'YYYY-MM-DD HH : MI : SS') from dual;                
 
-select hiredate 입사날짜 , TO_CHAR ( hiredate , 'YYYY-MM-DD  HH : mm : SS') 입사날짜2
+select hiredate 입사날짜 , TO_CHAR ( hiredate , 'YYYY-MM-DD  HH : MI : SS') 입사날짜2
 from employee;
 
-select hiredate 입사날짜 , TO_CHAR ( hiredate , 'YYYY"년"MM"월"DD"일"  HH"시" mm"분" SS"초"') 입사날짜2    -- 년 , 월, 일을 각 각  "  " 로 묶어주면 한글로 출력가능
+select hiredate 입사날짜 , TO_CHAR ( hiredate , 'YYYY"년"MM"월"DD"일"  HH"시" MI"분" SS"초"') 입사날짜2    -- 년 , 월, 일을 각 각  "  " 로 묶어주면 한글로 출력가능
 from employee;
 
+select TO_CHAR (sysdate, 'YYYY-MM-DD MON DAY  HH : M1 : SS' ) from dual ;
+
+-- TO_CHAR : 숫자를 문자형으로 변환
+/*
+    0 : 자릿수를 처리함, 자릿수가 많으면 0으로 처리됨
+    9 : 자릿수를 처리함, 자릿수가 많으면 공백으로 처리됨
+    L : 각 지역의 통화를 기호로 표시함
+    
+    .  : 소수점으로 처리됨
+    ,  : 천단위 구분자 
+
+*/
+
+select TO_CHAR (9876 , '000,000' ) from dual ;      --> 0은 자릿수를 나타냄
+select TO_CHAR (9876 , '999,999' ) from dual ;
+select TO_CHAR (9876 , 'L000,000' ) from dual ; 
+select TO_CHAR (9876 , 'L999,999' ) from dual ;
+
+select salary 월급 , to_char (salary , 'L999,999') "월급(한국)"
+from employee;
+
+-- TO_DATE : 문자 , 숫자를 날짜형식으로 바꿈
+    -- 날짜 + 100 일
+    -- months_between (날짜, 날짜) : 개월 수
+    
+select  to_date ('1998-10-10', 'yyyy-mm-dd')from dual;
+
+-- 1981년 01월 01일에서 100일 지난 시점의 날짜 ,  100개월 지난 시점의 날짜 출력 , add_months (날짜 , 개월수) 사용
+
+-- 1981년 01월 01일에서 100일 지난 시점의 날짜
+select to_date ('1981/01/01', 'yyyy/mm/dd') + 100 "100일 후 날짜"  
+from dual;
+
+-- 1981년 01월 01일에서 100개월 지난 시점의 날짜
+select  to_date ( add_months ( '1981-01-01' , 100), 'yyyy-mm-dd') from dual;
+select  add_months (to_date ('1981-01-01' , 'yyyy-mm-dd'), 100)  from dual; 
+
+-- 날짜타입으로 변환 
+select to_date (810101, 'yymmdd' )   from dual ;
+
+-- 자신의 생일에서 현재까지 몇 개월 살았는지 며칠 살았는지 출력 --> months_between ( 현재날짜, 생일) : 개월수
+    -- sysdate - 생일 ( date )
+
+select trunc( months_between( sysdate , to_date (19930108 , 'yyyymmdd') ) ) " 현재까지의 살아온 개월 수" ,
+          trunc (sysdate - (to_date ('1993/01/08' ,'yyyy/mm/dd'))) " 현재까지 살아온 일수" 
+from dual;
 
 
-
+ select trunc (sysdate - to_date (19930108 ,'yyyymmdd')) " 현재까지 살아온 일수" from dual ;
+ 
 
 
