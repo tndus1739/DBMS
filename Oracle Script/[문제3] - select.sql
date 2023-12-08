@@ -25,12 +25,20 @@
 select * from employee;
 
 -- [문제 1]  SUBSTR 함수를 사용하여 사원들의 입사한 년도와 입사한 달만 출력 하시오. 
+
 select substr ( hiredate , 1, 2 ) 입사년도 , substr (hiredate , 4, 2 ) 입사한달
 from employee;
+
+select * from employee; 
+select substr ( hiredate, 1,5 ) as 년월 
+from employee; 
+
 -- [문제 2] SUBSTR 함수를 사용하여 4월에 입사한 사원을 출력 하시오.
-select ename 사원이름 , substr (hiredate , 4,  2) "4월에 입사한 사원"
+
+select ename 사원이름 , hiredate 입사날짜
 from employee
 where substr (hiredate , 4,  2) = '04';
+
 -- [문제 3] MOD 함수를 사용하여 직속상관이 홀수인 사원만 출력하시오. 
 select ename 사원이름
 from employee

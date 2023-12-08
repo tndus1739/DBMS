@@ -69,6 +69,10 @@ select ename 사원이름, job 담당업무 , hiredate 입사일
 from employee
 where hiredate between '81/02/20' and '81/05/01';
 
+select ename, job, hiredate
+from employee
+where hiredate between '1981/2/20' and '1981/5/1'; 
+
 -- [문제7] 부서번호가 20및 30에 속한 사원의 이름과 부서번호를 출력하되 이름을 기준(내림차순)으로 출력하시오. 
 
 select ename 사원이름 , dno 부서번호
@@ -76,11 +80,21 @@ from employee
 where dno = '20' or dno = '30' 
 order by ename desc;
 
+select ename 사원이름 , dno 부서번호 
+from employee
+where dno in ( 20, 30 )
+order by ename desc; 
+
 -- [문제8] 사원의 급여가 2000에서 3000사이에 포함되고 부서번호가 20 또는 30인 사원의 이름, 급여와 부서번호를 출력하되 이름을 오름차순으로 출력하세요. 
 
 select ename 사원이름 , salary 급여, dno 부서번호
 from employee
-where salary between 2000 and 3000 and dno = '20' or dno = '30'
+where ( salary between 2000 and 3000 ) and ( dno = '20' or dno = '30')
+order by ename asc;
+
+select ename 사원이름 , salary 급여, dno 부서번호
+from employee
+where (salary between 2000 and 3000) and (dno in (20,30)) 
 order by ename asc;
 
 -- [문제9] 1981년도 입사한 사원의 이름과 입사일을 출력 하시오 ( like 연산자와 와일드 카드 사용 : _ , % )
@@ -88,6 +102,10 @@ order by ename asc;
 select ename 사원이름 , hiredate 입사일
 from employee
 where hiredate like '81%';
+
+select ename 사원이름, hiredate 입사일
+from employee
+where substr( hiredate , 1, 2 ) = '81' ;
 
 -- [문제10] 관리자가 없는 사원의 이름과 담당업무를 출력하세요.
 
@@ -108,17 +126,44 @@ select ename 사원이름
 from employee
 where  substr (ename , 3 , 1) = 'R';
 
+select ename 사원이름
+from employee
+where  instr ( ename , 'R', 3 ) = 3 ;
+
+select ename 사원이름
+from employee
+where  ename like '__R%' ;
+
 -- [문제13] 이름에 A 와 E 를 모두 포함하고 있는 사원의 이름을 표시하시오.
 
 select ename 사원이름
 from employee
 where instr( ename , 'A' ) > 0 and instr( ename , 'E' ) > 0;
 
+select ename 사원이름 
+from employee
+where ename like '%A%' and ename like '%E%' ;
+
+select ename 사원이름
+from employee
+where instr ( ename , 'A' ) <> 0 and instr ( ename , 'E' ) != 0 ;
+
+-- instr 값 확인
+select ename, instr ( ename , 'A' ), instr ( ename , 'E' ) from employee;
+
 -- [문제14] 담당 업무가 사무원(CLERK) 또는 영업사원(SALESMAN)이면서  급여가 $1600, $950, 또는 $1300 이 아닌 사원의 이름, 담당업무, 급여를 출력하시오.
 
 select ename 사원이름, job 담당업무 , salary 급여
 from employee
 where ( job = 'CLERK' or  job = 'SALESMAN' ) and not salary  in ( 1600, 950 , 1300) ;
+
+select ename 사원이름, job 담당업무 , salary 급여
+from employee
+where ( job = 'CLERK' or  job = 'SALESMAN' ) and  salary  not in ( 1600, 950 , 1300) ;
+
+select ename 사원이름, job 담당업무 , salary 급여
+from employee
+where job in ( 'CLERK' , 'SALESMAN' )  and  salary  not in ( 1600, 950 , 1300) ;
 
 -- [문제15] 커미션이 $500이상인 사원의 이름과 급여 및 커미션을 출력하시오.  
 
