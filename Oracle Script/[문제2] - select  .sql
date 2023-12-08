@@ -19,19 +19,27 @@
 15. 커미션이 $500이상인 사원의 이름과 급여 및 커미션을 출력하시오.  
 
 */ 
-
+select eno as 사원번호, ename 사원명, job 직책, manager "직속상관  ID",
+    hiredate 입사날짜, salary 월급, commission 보너스, dno 부서번호
+from employee; 
 
 -- [문제1]  덧셈 연산자를 사용하여 모든 사원에 대해서 $300의 급여 인상을 계산한후 사원이름, 급여, 인상된 급여를 출력하세요. 
 
 select ename  사원이름 , salary 급여 , salary + 300 "인상된 급여"
 from employee;
+ 
 
 -- [문제2] 사원의 이름, 급여, 연간 총 수입이 많은것 부터 작은순으로 출력 하시오. 연간 총 수입은 월급에 12를 곱한후 $100의 상여금을 더해서 계산 하시오. 
 
-select ename 사원이름, salary 급여 , salary * 12 + 100 "연간 총 수입"
+select * from tab ;
+
+select ename 사원이름, salary 급여 , salary * 12 + NVL(commission,0) + 100 "연간 총 수입"
 from employee
-order by salary * 12 + 100  desc ;
-    
+order by salary * 12 + NVL(commission,0) + 100 desc ;
+
+select ename, salary,commission,salary *12, salary *12 + NVL(commission,0) + 100 as 총연봉
+from employee;      
+
 -- [문제3] 급여가 2000을 넘는 사원의 이름과 급여를 급여가 많은것 부터 작은순으로 출력하세요. 
 
 select ename 사원이름 , salary 급여
@@ -43,13 +51,17 @@ order by salary desc;
 
 select ename 사원이름 , dno 부서이름
 from employee
-where eno = '7788';
+where eno = 7788;                                 -- eno가 숫자라서 따옴표 넣으면 안됨
 
 -- [문제5] 급여가 2000에서 3000사이에 포함되지 않는 사원의 이름과 급여를 출력 하세요. 
 
 select ename 사원이름 , salary 급여
 from employee
 where salary < 2000  or salary > 3000 ;
+
+select ename 사원이름 , salary 급여
+from employee
+where salary not between 2000 and 3000; 
 
 -- [문제6] 1981년 2월 20일부터 81년 5월 1일 사이의 입사한 사원의 이름 담당업무, 입사일을 출력하시오
 
