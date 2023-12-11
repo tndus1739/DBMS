@@ -198,31 +198,95 @@ on e.dno = d.dno;
  commit ;
  
     
-select *                                                              -- INNER JOIN ( INNER 생략가능)
-from emp01 e join dept01 d                            -- e.dno 와  d.dno 에서  매칭되는  값만 출력
+select *                                                                     -- INNER JOIN ( INNER 생략가능)
+from emp01 e join dept01 d                                   -- e.dno 와  d.dno 에서  매칭되는  값만 출력
 on e.dno = d.dno ;
 
-select *                                                              -- LEFT OUTER JOIN ( 왼쪽 테이블의 내용은 모두 출력)
+select *                                                                     -- LEFT OUTER JOIN ( 왼쪽 테이블의 내용은 모두 출력)
 from emp01 e LEFT OUTER JOIN dept01 d
 on e.dno = d.dno;
 
-select *                                                              -- RIGHT OUTER JOIN  ( 오른쪽 테이블의 내용은 모두 출력)
+select *                                                                     -- RIGHT OUTER JOIN  ( 오른쪽 테이블의 내용은 모두 출력)
 from emp01 e  RIGHT OUTER JOIN dept01 d
 on e.dno = d.dno;
 
-select *                                                              -- FULL OUTER JOIN  ( 두테이블 (왼쪽 ,오른쪽 테이블)의 모든 내용을 모두 출력)
+select *                                                                      -- FULL OUTER JOIN  ( 두테이블 (왼쪽 ,오른쪽 테이블)의 모든 내용을 모두 출력)
 from emp01 e  FULL OUTER JOIN dept01 d
 on e.dno = d.dno;
 
 -- SELF JOIN : 자신의 테이블을  JOIN , 자신의 테이블을  반드시 별칭이름으로 가상으로 생성해서 JOIN
     -- 조직도 출력 , 직급 상사를 바로 출력할 때 사용
     
-select e.eno 사원번호 , e.ename 사원이름 , e.manager "직속 상관번호" , m.eno 직속상관사번 , m.ename 직속상관명
-from  emp01 e JOIN emp01 m                                          -- 두 테이블이 동일한 테이블이라서 반드시 별칭이름 사용
-on e.manager = m.eno ;                                                     -- 직속상관 이름과 그 직속상관의 이름이 뭔지
+select e.eno 사원번호 , e.ename 사원이름 , e.manager "직속 상관번호" ,          -- SELF JOIN  
+m.eno 직속상관사번 , m.ename 직속상관명       
+from  emp01 e JOIN emp01 m                                                                             -- 두 테이블이 동일한 테이블이라서 반드시 별칭이름 사용
+on e.manager = m.eno ;                                                                                      -- 직속상관 이름과 그 직속상관의 이름이 뭔지
+
+-- SELF JOIN 으로 사원이름에 대한 직속상관이 누구인지 출력
+
+-- 직속상관이 없는 사원을 출력 : LEFT OUTER JOIN
+select e.eno 사원번호 , e.ename 사원이름 , e.manager "직속 상관번호" ,          
+m.eno 직속상관사번 , m.ename 직속상관명       
+from  emp01 e LEFT OUTER JOIN emp01 m                                                                             
+on e.manager = m.eno ;             
+
+-- 사원번호는 있지만 어떤 사원의 상관이 아닝 사원도 모두 출력해라 : RIGHT OUTER JOIN
+select e.eno 사원번호 , e.ename 사원이름 , e.manager "직속 상관번호" ,          
+m.eno 직속상관사번 , m.ename 직속상관명       
+from  emp01 e RIGHT OUTER JOIN emp01 m                                                                             
+on e.manager = m.eno ;             
+
+-- 직속 상관이 없는 것 ( 왼쪽) , 사원번호는 가지지만 어떤사원의 직속 상관이 아닌 사원(오른쪽) : FULL OUTER JOIN
+select e.eno 사원번호 , e.ename 사원이름 , e.manager "직속 상관번호" ,          
+m.eno 직속상관사번 , m.ename 직속상관명       
+from  emp01 e FULL OUTER JOIN emp01 m                                                                             
+on e.manager = m.eno ;    
 
 select eno , ename , manager , eno , ename
 from employee ;
+
+-- 사원이름 'SCOTT'의 부서명 (dname) , 부서위치(loc)  (INNER JOIN사용)  --> ename : 'SCOTT'은 emp01 /  dept01 : dname , loc
+-- ANSI JOIN 
+
+select * from emp01 ;
+select * from dept01 ;
+
+-- emp01, dept01 을 JOIN해서 출력
+
+select e.ename 사원이름 ,   d.dname 부서명 , d.loc 부서위치    -- select 절에 dno를 입력하면 오류발생 (e.dno 나 d.dno라고 입력해야 함)
+from emp01 e join dept01 d
+on  e.dno = d.dno
+where e.ename ='SCOTT';
+
+-- 월급이 2000만원 이상인 사원의 이름, 부서명, 부서위치, 월급을 출력 : ANSI JOIN
+ select e.ename 사원이름 , d.dname 부서명 , d.loc 부서위치 ,  e.salary 월급
+ from emp01 e join dept01 d
+ on e.dno = d.dno
+ where salary >= 2000 ;
+
+select ename 사원이름 ,  salary  월급, dname 부서명 , loc 부서위치 , e.dno
+ from emp01 e join dept01 d
+ on e.dno = d.dno
+ where salary >= 2000 
+ order by d.dno desc;
+ 
+-- ANSI JOIN
+-- 직책(job)이 'MANAGER'인 사원이름(ename) , 부서번호(dno) , 부서명(dname) , 부서위치( loc) 를 출력하되 사원이름을 내림차순 정렬
+select job 직책 , ename 사원이름 , e.dno 부서번호 , dname 부서명 , loc  부서위치
+from emp01  e join  dept01 d
+on e.dno = d.dno
+where job = 'MANAGER'
+order by ename desc ;
+
+
+
+
+
+
+
+
+
+
 
 
 
