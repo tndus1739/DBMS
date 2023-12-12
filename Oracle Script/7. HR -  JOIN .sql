@@ -1,13 +1,18 @@
-/*
-       ★  JOIN : DataBase 에는 많은 테이블이 존재 , 모델링을 통해서 테이블이 분리되어 있음 ( 테이블과 테이블은 Relatioinship 관계   : R - DBMS )
+/*   ★★★★★
+
+       ★  JOIN : DataBase 에는 많은 테이블이 존재 , 모델링을 통해서 테이블이 분리되어 있음 
+        -  R-DBMS : 테이블과 테이블은 Relatioinship 관계 ( 테이블과 테이블이 관계를 가지고 있다.)
             employee 테이블과 department 테이블은 하나의 테이블인데 모델링 ( 1, 2, 3 정규화) 을 통해서 분리해 놓은 것
+            
        ★  모델링 : 중복제거 , 성능향상 , 불필요한 하드용량 차지 방지
-       
+         - 테이블을 분리시켜 놓은 이유 : 불필요한 하드용량 차지 방지 , 중복제거 
+         
        ★ 제약조건 : 테이블의 컬럼에 들어가는 키 , 데이터의 무결성 ( 결함없는 데이터 -> 내가 원하는 값만 넣도록 하는 것 )
-           - Primary Key  제약조건 
+       
+           ▶ Primary Key  제약조건 
            
              →  테이블의 컬럼에 1번만 넣을 수 있다. 
-                  2개의 컬럼을 묶어서 PK를 넣을 수 있다. (원래는 하나당 하나의 PK)
+                  2개의 컬럼을 묶어서 PK를 넣을 수 있다. -> 2개의 컬럼에 대해서 중복된 값이 있으면 안됨 (원래는 하나당 하나의 PK)
                   테이블을 생성할 때 반드시 PK (Primary Key)이 존재해야 한다.  
                   Update , Delete 구문에서 PK 컬럼을 where 조건으로 사용함
                   특정 컬럼에 중복된 값을 넣지 못하도록 함
@@ -15,29 +20,29 @@
                   index가 자동으로 생성된다. ( index : 컬럼의 검색을 빠르게 함)
                   join시 ON에서 많이 사용하는 키 컬럼
                                               
-           - Unique Key 제약조건 :
+           ▶ Unique Key 제약조건 :
              
              →  컬럼에 중복된 값을 넣지 못하도록 함
                   null을 넣을 수 있다. 단, 1번만 가능 ( not null , null )
                   하나의 테이블에 여러번 Unique Key 를 넣을 수 있다.
                   index 가 자동으로 생성된 . JOIN시 ON에 사용됨
                   
-           - Foreign Key  제약조건 : 
+           ▶ Foreign Key  제약조건 : 
       
             →  다른 테이블 (부모테이블)의 특정 컬럼을 참조해서 값을 넣도록 함
                  부모테이블을 참조해서 넣기 때문에 부모테이블에 없는 값은 참조해서 값을 넣을 수 없다.
-                 Foreign Key 가 참조하는 컬럼은 부모테이블의 Primary Key , Unique Key 를 참조함
+                 Foreign Key 가 참조하는 컬럼은 부모테이블의 "Primary Key" , "Unique Key" 를 참조함
             
-           - NOT NULL 
+           ▶ NOT NULL 
            
            → 컬럼에 NULL을 넣을 수 없도록 하는 제약조건
            
-           - CHECK
+           ▶ CHECK
            
             → 컬럼에 조건을 넣어서 내가 원하는 값만 넣을 수 있도록 함
                 ex) 월 (month) 컬럼에 1 ~ 12 가지 넣을 수 있도록 check 제약조건 사용
            
-           - DEFAULT
+           ▶ DEFAULT
            
            → 제약조건은 아니지만 제약조건처럼 사용됨
                컬럼에 값을 넣지 않으면 default로 설정된 값이 등록됨
@@ -277,6 +282,7 @@ from emp01  e join  dept01 d
 on e.dno = d.dno
 where job = 'MANAGER'
 order by ename desc ;
+
 
 
 
