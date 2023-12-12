@@ -68,7 +68,7 @@ create table products20 (
   commit;
   
    insert into member20 (id , pwd , name , zipcode , address , tel , indate  )
-  values ( 'aaaaa' , '1234' , '홍길동' , '1001' , '서울시 강남구 '  , '010-0000-0000' , default );
+  values ( 'aaaaa' , '1234' , '홍길동' , '1001' , '서울시 강남구 '  , '010-0000-0000' , sysdate );
    insert into member20 (id , pwd , name , zipcode , address , tel , indate  )
   values ( 'bbbbb' , '4567' , '이길동' , '1011' , '서울시 종로구 '  , '010-1111-1111' , default );
    insert into member20 (id , pwd , name , zipcode , address , tel , indate  )
@@ -80,7 +80,7 @@ create table products20 (
   commit;
   
     insert into products20 (product_code , product_name , product_kind , product_price1 , product_price2 , product_content , product_image ,  sizeSt , sizeEt , products_quantity , useyn , indate)
-  values ( '1111' , 'iphone11' , 'p' , '150' , '300'  , '아이폰' , 'phone' , '10' , '10' , '100 ' , 'y' , default );
+  values ( '1111' , 'iphone11' , 'p' , '150' , '300'  , '아이폰' , 'phone' , '10' , '10' , '100 ' , 'y' , default);
    insert into products20 (product_code , product_name , product_kind , product_price1 , product_price2 , product_content , product_image ,  sizeSt , sizeEt , products_quantity , useyn , indate)
   values ( '2222' , 'iphone12' , 'p' , '150' , '300'  , '아이폰' , 'phone' , '10' , '10' , '200 ' , 'y' , default );
    insert into products20 (product_code , product_name , product_kind , product_price1 , product_price2 , product_content , product_image ,  sizeSt , sizeEt , products_quantity , useyn , indate)
@@ -91,7 +91,14 @@ create table products20 (
   values ( '5555' , 'iphone15' , 'p' , '150' , '300'  , '아이폰' , 'phone' , '10' , '10' , '500 ' , 'n' , default );
  commit;
  
- 
+  update products20
+  set indate = to_date ('23/11/15' ,'yy/mm/dd')
+  where product_code = '1111';
+ update products20
+  set indate = sysdate
+  where product_code = '2222';
+  
+  
  insert into orders20 (o_seq , product_code , id ,product_size ,quantity , result , indate  )
   values ( '0001' , '1111' , 'aaaaa' , '1010' , '2'  , 'y' , default );
    insert into orders20 (o_seq , product_code , id ,product_size ,quantity , result , indate  )
@@ -119,9 +126,9 @@ create table products20 (
   select * 
   from member20;
     
-        create view vv_join
+        create view vvv_join
     as
-    select   name 주문자성함  , z.zipcode 우편번호  , m.indate 주문일 , product_price2 제품가격
+    select   name 주문자성함  , z.zipcode 우편번호  , p.indate 주문일 , product_price2 제품가격 , p.product_name 제품이름
     from tb_zipcode20 z
             join member20 m
               on   m.zipcode = z.zipcode         
