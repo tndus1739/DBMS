@@ -26,6 +26,11 @@ temporary tablespace TEMP;
 
 grant resource, connect to C##HR4;    -- grant : 부여하겠다.
 
+
+-- system 계정에서 HR계정에게 create view 권한을 부여함
+
+grant create view  to C##HR;    -- HR 계정에 view를 만들 수 있는 권한을 주겠다,
+
 -- 3. 테이블 스페이스에서 서용량 할당
 
 alter user C##HR4 quota unlimited on USERS; -- user space를 무제한 사용할 수 있도록 함

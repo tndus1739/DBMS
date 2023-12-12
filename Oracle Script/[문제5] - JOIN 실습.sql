@@ -242,3 +242,39 @@ from member10 m
       on o.m_id = m.m_id
     join  zipcode10 z
       on m.zipcode = z.zipcode ;
+      
+-- 4개 테이블 조인 : order10 , member10 , zipcode10 , product10
+
+select *
+from order10 o
+    join member10 m
+      on o.m_id = m.m_id
+    join zipcode10 z
+      on m.zipcode = z.zipcode
+    join product10 p
+      on o.pro_id = p.pro_id ;
+     
+-- 주문하지 않는 사용자 정보도 출력 , 판매되지 않는 제품도 출력 ( OUTER JOIN 사용 )    
+
+select *
+from order10 o
+     join member10 m
+      on o.m_id = m.m_id
+    join zipcode10 z
+      on m.zipcode = z.zipcode
+    right outer join product10 p
+      on o.pro_id = p.pro_id ;     
+ 
+ -- LEFT OUTER JOIN
+ 
+ select *
+from  member10 m
+    left outer join order10 o
+      on m.m_id  =  o.m_id 
+     join zipcode10 z
+      on m.zipcode = z.zipcode
+     left outer join product10 p
+      on o.pro_id = p.pro_id ;     
+      
+
+                   
