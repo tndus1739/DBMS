@@ -220,3 +220,211 @@ where eno in (7369 , 7499) ;
 update emp04
 set salary  =5000 , manager = '2222'
 where eno in (7521 ,7566) ;
+
+delete emp04
+where eno = 7934 ;
+
+commit ;
+
+-- -----------------------------------------------------
+/*
+        ★ DDL : create (생성) , alter (수정) , drop ( 삭제 ) --> ★테이블★ , 뷰 , 함수 , 시퀀스 , 트리거 , 저장프로시져,  스키마 (값을 넣기 위한 틀 ) 를 생성 , 수정 , 삭제
+        
+        자료형 : 데이터를 저장하는 타입
+            - 숫자 : number (3)  : 정수 3자리
+                         number ( 7, 2 ) : 소수  , 전체 7자리 , 소수점이하 2자리까지 
+        
+            - 문자 : char (n)  :  영문 1자 (1byte) , 한글 1자 3 (3byte) 
+                                     ->  성능은 빠르지만 하드 공간 낭비가 발생할 수 있다. (선언과 동시에 하드에 할당을 받아서 값이 일부만 들어와도 하드에 공간을 그대로 차지) 
+                                            주민번호 (13) , 자릿수가 지정된 곳에 사용됨    
+                                            (ex)  char (10)  : 영어는 10자까지 , 한글은 3자까지 가능
+                                            
+                         varchar2 (n) : 영문 1자 (1 byte) , 한글 1자 ( 3byte)            
+                                            -> 하드공간 낭비 방지 가능 ( 공간이 가변적으로 사용됨 , 설정한 값보다 적은 값이 들어오면 적은 값으로 적용됨)        
+                                                가변공간으로 적용됨 , 성능은 char보다 느릴 수 있지만 하드공간을 낭비하지 않는다.
+                                                자리수를 알 수 없는 문자열에 사용됨
+                                                nchar (n)            --> ncahr(10)         :  한글 10자까지 가능   ( n이 붙으면 유니코드 10자까지 가능)
+                                                nvarchar2(n)     --> nvarchar(10)   :  한글 10자까지 가능
+            - 날짜 : date  : BC 4712년 1월 1일  ~  9999년 12월 31일 까지 저장  --> 년 , 월 , 일 , 시 , 분, 초 까지만 저장 가능
+                         timestamp : insert ( 값이 들어오는 시스템의 시간)  --> 년 , 월 , 일 , 시 , 분, 초 , 밀리세컨드 까지 저장
+            - LOB 데이터 타입 : 대량의 값을 저장 , 바이너리 파일
+                    - CLOB : 문자를 대량으로 넣을 수 있다. --> 글내용
+                    - BLOB : mp3 , jepg , hwp 이진 데이터 파일
+                    - BFile : 대용량 파일 저장
+*/
+
+-- ----------------------------------------------------------------------
+
+create table test10 (
+            id number (4) not null primary key,        -- 중복된 값은 넣을 수 없다. 정수 4자리까리 가능
+            n1 char (10) ,                                -- 영문 10 자 , 한글 3자 까지 가능
+            n2 nchar (10) ,                              -- 영문 10자 , 한글 10자 까지 가능
+            n3 varchar2(10)  ,                         -- 영문 10 자 , 한글 3자 까지 가능
+            n4 nvarchar2 (10)                         -- 영문 10자 , 한글 10자 까지 가능
+ );
+ drop table test10 ;
+ 
+select * from test10 ;
+
+insert into test10 ( id , n1 , n2 , n3 , n4)
+values ( 1111 , 'ababababab' , '이이이이이이이이이이' , 'opopopopop' , '오오오오오오오오오오' );
+
+insert into test10 (id , n2)
+values ( 1010, 'aaaaaaaaa');
+
+insert into test10 (id , n1)
+values ( 2222, '가나다');
+
+
+-- --------------------------------------------------------------------------------------------------
+/*
+
+★ 제약조건 : 테이블의 컬럼에 들어가는 키 , 데이터의 무결성 ( 결함없는 데이터 -> 내가 원하는 값만 넣도록 하는 것 )
+       
+           ▶ Primary Key  제약조건 
+           
+             →  테이블의 컬럼에 1번만 넣을 수 있다. 
+                  2개의 컬럼을 묶어서 PK를 넣을 수 있다. -> 2개의 컬럼에 대해서 중복된 값이 있으면 안됨 (원래는 하나당 하나의 PK)
+                  테이블을 생성할 때 반드시 PK (Primary Key)이 존재해야 한다.  
+                  Update , Delete 구문에서 PK 컬럼을 where 조건으로 사용함
+                  특정 컬럼에 중복된 값을 넣지 못하도록 함
+                  반드시 not null 컬럼이어야 함 ( null 사용 불가)                            
+                  index가 자동으로 생성된다. ( index : 컬럼의 검색을 빠르게 함)
+                  join시 ON에서 많이 사용하는 키 컬럼
+                                              
+           ▶ Unique Key 제약조건 :
+             
+             →  컬럼에 중복된 값을 넣지 못하도록 함
+                  null을 넣을 수 있다. 단, 1번만 가능 ( not null , null )
+                  하나의 테이블에 여러번 Unique Key 를 넣을 수 있다.
+                  index 가 자동으로 생성된 . JOIN시 ON에 사용됨
+                  
+           ▶ Foreign Key  제약조건 : 
+      
+            →  다른 테이블 (부모테이블)의 특정 컬럼을 참조해서 값을 넣도록 함
+                 부모테이블을 참조해서 넣기 때문에 부모테이블에 없는 값은 참조해서 값을 넣을 수 없다.
+                 Foreign Key 가 참조하는 컬럼은 부모테이블의 "Primary Key" , "Unique Key" 를 참조함
+            
+           ▶ NOT NULL 
+           
+           → 컬럼에 NULL을 넣을 수 없도록 하는 제약조건
+           
+           ▶ CHECK
+           
+            → 컬럼에 조건을 넣어서 내가 원하는 값만 넣을 수 있도록 함
+                ex) 월 (month) 컬럼에 1 ~ 12 가지 넣을 수 있도록 check 제약조건 사용
+           
+           ▶ DEFAULT
+           
+           → 제약조건은 아니지만 제약조건처럼 사용됨
+               컬럼에 값을 넣지 않으면 default로 설정된 값이 등록됨
+               
+         - 제약 조건을 출력하는 데이터 사전 : user_constraints
+            select * from user_constraints where table_name in ('테이블명') ;
+                 
+*/
+
+-- 제약조건 이름을 넣지 않고 테이블을 생성한 경우 : Oracle에서 제약조건 이름을 랜덤으로 생성한다.  
+-- insert 시 오류가 발생할 경우 제약조건 이름으로 오류난 컬럼을 찾기 힘듦
+create table member1 (
+    id varchar2 (50) not null primary key ,      -- primary key 에는 null을 넣어도 not null로 변경된다. 
+    pass varchar2 (50) not null ,
+    addr varchar2 (100)  null ,
+    jumin char (13) null ,             -- 자릿수가 지정된 컬럼
+    phone varchar2 (50) ,
+    age number (3) ,                    -- 정수 3자리
+    weight number (5,2)              -- 실수 전체 5자리 , 소숫점이하 2자리
+    );
+
+desc member1 ;
+
+insert into member1 ( id ,  pass, addr, jumin , phone , age , weight )
+values ('abc' , '000000' , '서울 ' , '90108-1111111' , '010-111-1111' , 20 , 47.13 );
+commit ;
+
+select * from user_constraints where table_name in ('MEMBER1');
+
+-- 제약조건 이름을 넣어서 테이블을 생성한 경우
+create table member2 (
+    id varchar2 (50) not null constraint PK_MEMBER2_ID  primary key ,      -- primary key 에는 null을 넣어도 not null로 변경된다.  ( 제약조건 이름설정 : constraint + PK_테이블명_컬럼명)
+    pass varchar2 (50) constraint NN_MEMBER2_PASS not null ,                  -- not null 도 제약조건이라서 제약조건이름을 설정해준다. (생략가능하지만 생략하면 이름이 랜덤으로 생성)
+    addr varchar2 (100)  null ,
+    jumin char (13) null ,             -- 자릿수가 지정된 컬럼
+    phone varchar2 (50) ,
+    age number (3) ,                    -- 정수 3자리
+    weight number (5,2)              -- 실수 전체 5자리 , 소숫점이하 2자리
+    );
+
+select * from user_constraints where table_name in ('MEMBER2');
+
+insert into member2 ( id ,  pass, addr, jumin , phone , age , weight )
+values ('ddd' , 'null' , '서울 ' , '90108-1111111' , '010-111-1111' , 20 , 47.13 );
+
+select * from member2 ;
+commit ;
+
+update  member2
+set pass = '1010111'
+where id = 'abc';
+
+
+
+--  ★ UNIQUE  : 중복된 값을 넣을 수  없다. null을 넣을 수 있다. 테일블에 여러번 넣을 수 있다. 
+
+create table member3 (
+    id varchar2 (50) not null constraint PK_MEMBER3_ID  primary key ,      -- primary key 에는 null을 넣어도 not null로 변경된다.  ( 제약조건 이름설정 : constraint + PK_테이블명_컬럼명)
+    pass varchar2 (50) constraint NN_MEMBER3_PASS not null ,                  -- not null 도 제약조건이라서 제약조건이름을 설정해준다. (생략가능하지만 생략하면 이름이 랜덤으로 생성)
+    addr varchar2 (100)  null ,
+    jumin char (13) null constraint U_MEMBER_3_JUMIN unique,                               --중복되면 안됨                  -- 자릿수가 지정된 컬럼
+    phone varchar2 (50) not null constraint U_MEMBER_3_PHONE unique ,              --중복되면 안됨 
+    age number (3) ,                                                                                               -- 정수 3자리
+    weight number (5,2)                                                                                         -- 실수 전체 5자리 , 소숫점이하 2자리
+    );
+    
+ insert into member3 ( id ,  pass, addr, jumin , phone , age , weight )
+values ('ㅠㅠㅠ' , '얌' , '서울 ' , '90328-1111111' , '011-1534-1221' , 20 , 47.13 );
+
+select * from member3;
+
+-- CHECK 제약조건 : 컬럼의 조건에 맞는 값만 넣을 수 있도록 함 
+    
+   create table member4 (
+    id varchar2 (50) not null constraint PK_MEMBER4_ID  primary key ,      -- primary key 에는 null을 넣어도 not null로 변경된다.  ( 제약조건 이름설정 : constraint + PK_테이블명_컬럼명)
+    pass varchar2 (50) constraint NN_MEMBER4_PASS not null ,                  -- not null 도 제약조건이라서 제약조건이름을 설정해준다. (생략가능하지만 생략하면 이름이 랜덤으로 생성)
+    addr varchar2 (100)  null constraint CK_MEMBER4_ADDR check ( addr  in ( '서울' , '부산', '대구')) ,
+    jumin char (13) null constraint U_MEMBER_4_JUMIN unique,                               --중복되면 안됨                  -- 자릿수가 지정된 컬럼
+    phone varchar2 (50) not null constraint U_MEMBER_4_PHONE unique ,              --중복되면 안됨 
+    age number (3) constraint CK_MEMBER4_AGE check (age > 0 and age < 200)  ,                                                                                               -- 정수 3자리
+    gender char(1) constraint CK_MEMBER4_GENDER check (gender in ('w' , 'm')),
+    weight number (5,2)                                                                                       -- 실수 전체 5자리 , 소숫점이하 2자리
+    );
+    
+ insert into member4 ( id ,  pass, addr, jumin , phone , age , gender , weight  )
+values ('222' , '뭐' , '대구' , '90832-111551' , '019-1534-5571'  ,99 , 'w', 47.1253 ); 
+    
+select * from member4; 
+drop table  member4 ;   
+commit ;    
+
+-- ★ default : default 는 제약조건이 아님 (제약조건 이름을 부여할 수 없다. )
+    -- 값을 넣을 때 값이 들어가고 값을 넣지 않을 때 default 로 설정된 값이 들어간다. 
+    
+  create table member5 (
+    id varchar2 (50) not null constraint PK_MEMBER5_ID  primary key ,      -- primary key 에는 null을 넣어도 not null로 변경된다.  ( 제약조건 이름설정 : constraint + PK_테이블명_컬럼명)
+    pass varchar2 (50) constraint NN_MEMBER5_PASS not null ,                  -- not null 도 제약조건이라서 제약조건이름을 설정해준다. (생략가능하지만 생략하면 이름이 랜덤으로 생성)
+    addr varchar2 (100)  null constraint CK_MEMBER5_ADDR check ( addr  in ( '서울' , '부산', '대구')) ,
+    jumin char (13) null constraint U_MEMBER_5_JUMIN unique,                               --중복되면 안됨                  -- 자릿수가 지정된 컬럼
+    phone varchar2 (50) not null constraint U_MEMBER_5_PHONE unique ,              --중복되면 안됨 
+    age number (3) constraint CK_MEMBER5_AGE check (age > 0 and age < 200)  ,                                                                                               -- 정수 3자리
+    gender char(1) constraint CK_MEMBER5_GENDER check (gender in ('w' , 'm')),
+    weight number (5,2) ,                                                                                         -- 실수 전체 5자리 , 소숫점이하 2자리
+    hiredate date default sysdate  ,
+    addr2 char(10) default '서울' ,
+    age2 number default 0
+    );
+    
+insert into member5 ( id ,  pass, addr, jumin , phone , age , gender , weight , hiredate , addr2 , age2 )
+values ('333' , '뭐' , '대구' , '80832-111551' , '018-1534-5571' , 100 , 'w', 47.1253 , '23/12/14' , '울산' , 88 ); 
+ 
+select * from member5;    
+
