@@ -246,7 +246,8 @@ select hiredate 입사날짜 , last_day( hiredate ) "입사한 날의 마지막 날짜" from e
 
 select sysdate from dual ;                                                                             -- 23/12/07 로 출력
 
--- YYYY : 년도 , MM : 월 , DD  : 일 , HH : 시간 , MI : 분 , SS : 초  , DAY : 요일 (월요일, 화요일..) , DY (월, 화, 수 ...)         
+-- YYYY : 년도 , MM : 월 , DD  : 일 , HH : 시간 , MI : 분 , SS : 초  , MON  : ( 1월 , 2월 , 3월 ... ) , DAY : 요일 (월요일, 화요일..) , DY (월, 화, 수 ...)       
+-- 
 select TO_CHAR (sysdate , 'YYYY-MM-DD HH : MI : SS') from dual;                
 
 select hiredate 입사날짜 , TO_CHAR ( hiredate , 'YYYY-MM-DD  HH : MI : SS') 입사날짜2
@@ -255,7 +256,10 @@ from employee;
 select hiredate 입사날짜 , TO_CHAR ( hiredate , 'YYYY"년"MM"월"DD"일"  HH"시" MI"분" SS"초"') 입사날짜2    -- 년 , 월, 일을 각 각  "  " 로 묶어주면 한글로 출력가능
 from employee;
 
-select TO_CHAR (sysdate, 'YYYY-MM-DD MON DAY  HH : M1 : SS' ) from dual ;
+select TO_CHAR (sysdate, 'YYYY-MM-DD MON DAY DY HH : MI : SS') from dual ;
+
+
+
 
 -- TO_CHAR : 숫자를 문자형으로 변환
 /*

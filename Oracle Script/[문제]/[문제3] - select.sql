@@ -43,19 +43,13 @@ where substr (hiredate , 4,  2) = '04';
 select ename 사원이름
 from employee
 where mod ( manager , 2 ) = 1 ;
-
 -- [문제 4] MOD 함수를 사용하여 월급이 3의 배수인 사원들만 출력하세요.
 select ename 사원이름
 from employee
 where mod ( salary , 3 ) = 0 ;
-
 -- [문제 5] 입사한 년도는 2자리 (YY), 월은 (MON)로 표시하고 요일은 약어 (DY)로 지정하여 출력 하시오. 
-
-select to_char ( hiredate , 'yy MON dd dy' )
+select to_char ( hiredate , 'yy MON dy' )
 from employee;
-
-select hiredate , to_char ( hiredate, 'YY MON DD DY') as 출력결과 
-from employee; 
 
 -- [문제 6] 올해 몇 일이 지났는지 출력 하시오. 현재 날짜에서 올해 1월 1일을 뺀 결과를 출력하고 TO_DATE 함수를 사용하여 데이터 형식을 일치 시키시오.
 select trunc (sysdate - to_date ( '20230101') ) 
