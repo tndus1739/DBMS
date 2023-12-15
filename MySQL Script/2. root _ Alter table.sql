@@ -47,6 +47,57 @@ where dno = 10 ;
 delete from dept60
 where dno = 20 ;
 
+-- MTSQL은 자동 커밋 transantion
+create table account10 (
+	no int not null primary key,
+	name varchar(50) not null,
+	money double not null default 0 
+	);
+
+select * from account10 ;
+
+insert into account10
+values ( 1, '홍길동' , 100);
+
+insert into account10
+values ( 2, '이순신' , 200);
+
+-- 홍길동 계좌에서 10억을 이순신 계좌로 입급 : transaction이 2번 발생됨 (잘못된 경우)
+-- transaction이 2번 발생되면 문제 발생시 출금은 됐는데 입금은 안되어있는 불상사가 발생
+
+-- 1번째 transaction
+update account10
+set money = money - 10
+where no  = 1 ; 
+
+-- 2번째 transaction
+update account10
+set money = money + 10
+where no  = 2 ; 
+
+-- 홍길동 계좌에서 10억을 이순신 계좌로 입급 : transaction이 1번 발생됨  
+-- ( 이렇게 하나의 transaction으로 묶어줬을 때 문제 발생시 한 번에 rollback 이나 commit을 해줄 수 있음)
+
+start transaction ;   --  transaction을 명시
+
+update account10
+set money = money - 10
+where no  = 1 ; 
+
+update account10
+set money = money + 10
+where no  = 2 ; 
+
+commit ; 
+
+
+
+
+
+
+
+
+
 
 
 
