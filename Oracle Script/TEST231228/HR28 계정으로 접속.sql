@@ -14,7 +14,7 @@ create table product (
     name varchar2(255) not null,              
     price number(8,2) not null,                    
     content varchar2(2000),                        
-    regdate date default sysdate              
+    regdate date default sysdate             
     );
 
 create table m_board (
@@ -30,8 +30,7 @@ select * from member;
 select * from product;
 select * from m_board;
 
-INSERT INTO m_board (id,
 
 
-drop table member;
+drop table product;
 commit;
